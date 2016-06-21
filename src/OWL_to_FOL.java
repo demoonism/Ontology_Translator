@@ -245,20 +245,6 @@ public class OWL_to_FOL{
 			
 			
 			
-//			
-//			System.out.println(eElement.getElementsByTagName("rdfs:subClassOf").item(0).getTextContent());
-//			
-//			
-	
-			//System.out.print(innerXml(nNode));
-			//System.out.println("-------hehe----------");
-//			if(sCurrentLine.contains("<!ENTITY"))
-//			{
-//			if(innerXml(nNode).contains("<rdfs:subClassOf rdf:resource="))
-//			{
-//				
-//				
-//			}
 			
 			
 		}
