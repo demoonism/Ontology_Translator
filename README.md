@@ -10,6 +10,11 @@ inductive logic inference.
 
 Or reversly, it translate FOL to OWL (beta). 
 
+
 #CL to FOL translator
 
 It takes an .clif file and translate it to .in file format.
+
+#Update: Adding an old school GUI to match the ontology society covention...lol
+
+![Alt text](Ontology_Translator/file.JPG "Optional Title")
