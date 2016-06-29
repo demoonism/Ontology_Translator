@@ -10,13 +10,18 @@ inductive logic inference.
 
 Or reversly, it translate FOL to OWL (beta). 
 
+<div align="center">
+  <img src="https://raw.githubusercontent.com/demoonism/Ontology_Translator/master/option.JPG"><br><br>
+</div>
+
+
+An .in file is generated upon completion.
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/demoonism/Ontology_Translator/master/result.JPG"><br><br>
+</div>
+
 
 #CL to FOL translator
 
 It takes an .clif file and translate it to .in file format.
-
-#Update: Adding an old school GUI to match the ontology society covention...lol
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/demoonism/Ontology_Translator/master/file.JPG"><br><br>
-</div>
