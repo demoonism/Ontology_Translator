@@ -17,4 +17,4 @@ It takes an .clif file and translate it to .in file format.
 
 #Update: Adding an old school GUI to match the ontology society covention...lol
 
-![Alt text](Ontology_Translator/file.JPG "Optional Title")
+![ScreenShot](https://raw.githubusercontent.com/demoonism/Ontology_Translator/master/file.JPG)
