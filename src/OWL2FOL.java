@@ -26,9 +26,6 @@ public class OWL2FOL {
   				Document doc = dBuilder.parse(fXmlFile);
   			 
   				doc.getDocumentElement().normalize();
-  			 
-  				//br.write("Root element :" + doc.getDocumentElement().getNodeName());
-  			 
   				NodeList nList = doc.getElementsByTagName("owl:Class");
   			
   				File module = null;
@@ -76,26 +73,25 @@ public class OWL2FOL {
   				    		else
   				    		{
   				    			
-  				    			String   onPropertyText="";
+  				    			 String   onPropertyText="";
   				    			 String   hasValueText="";
   				    			 String   someValueText="";
-  				    			NodeList RestrictionList = subClass.getElementsByTagName("owl:Restriction");
+  							   	 String   allValueText = "";
+  				    			 
+  							   	 NodeList RestrictionList = subClass.getElementsByTagName("owl:Restriction");
   				    			 for (int l = 0; l < RestrictionList.getLength(); ++l)
   				    		        {
-  				    		        	
+  				 
   			//Restriction not used???
-  				    		            Element Restriction = (Element) RestrictionList.item(l);
-  				    	    			
+  				    		            Element Restriction = (Element) RestrictionList.item(l);			    	    			
   				    		            NodeList onPropertyList = subClass.getElementsByTagName("owl:onProperty");
   				    		            
   				   	    			    for (int m = 0; m < onPropertyList.getLength(); ++m)
   				   	    		        {
   				   	    		        	
-  			
   				   	    		            Element onProperty = (Element) onPropertyList.item(m);
   				   	    		            onPropertyText = onProperty.getAttribute("rdf:resource").replace("#", "");
   				   	    		            if(onPropertyText.contains(".owl"))
-  					    		            	
   					    		            {
   					    		            	
   				   	    		            	onPropertyText = 	onPropertyText.substring(onPropertyText.indexOf("owl")+3);
@@ -105,53 +101,67 @@ public class OWL2FOL {
   				   	    		       
   				   	    		    	}
   				   	    			    
-  				   	    			 NodeList hasValueList = subClass.getElementsByTagName("owl:hasValue");
-  				    		         NodeList someValueList = subClass.getElementsByTagName("owl:someValue");
-  				    		         
-  				   	    			    for (int m = 0; m < hasValueList.getLength(); ++m)
-  				   	    		        {
-  				   	    		        	
-  			   	    		            Element hasValue = (Element) hasValueList.item(m);
-  			   	    		            hasValueText = hasValue.getAttribute("rdf:resource").replace("#", "");
-  			   	    		            if(hasValueText.contains(".owl"))
-  				    		            	
-  				    		            {
-  				    		            	
-  			   	    		            	hasValueText = 	hasValueText.substring(hasValueText.indexOf("owl")+3);
-  				    		            }
-  				   	    		    	}
-  				   	    			    
-  				   	    			    for (int m = 0; m < someValueList.getLength(); ++m)
-  				   	    		        {
-  			
-  			   	    		           Element someValue = (Element) someValueList.item(m);
-  			   	    		        	someValueText = someValue.getAttribute("rdf:resource").replace("#", "");
-  			   	    		            if(someValueText.contains(".owl"))
-  				    		            	
-  				    		            {
-  				    		            	
-  			   	    		            	someValueText = 	someValueText.substring(someValueText.indexOf("owl")+3);
-  				    		            }
-  				   	    		    	}
-  				   	    			    
-  				   	    			    
-  				   	    			    
-  				    	    		       if(someValueText.isEmpty()){
-  				    	   	    		        br.write("(forall (x)\n");
-  				    	   		    			br.write("(if  (" + HeadNode+ " x)\n");
-  				    	   		    			br.write("     (" + onPropertyText + " x  " +hasValueText+")))\n");
-  				    	   		    			br.write("\n");
-  				    	    		       }
+  				   	    			NodeList hasValueList = subClass.getElementsByTagName("owl:hasValue");
+  									NodeList someValueList = subClass.getElementsByTagName("owl:someValuesFrom");
+  									NodeList allValueList = subClass.getElementsByTagName("owl:allValuesFrom");
+  									for (int m = 0; m < hasValueList.getLength(); ++m) {
+
+  										Element hasValue = (Element) hasValueList.item(m);
+  										hasValueText = hasValue.getAttribute("rdf:resource").replace("#", "");
+
+  										if (hasValueText.contains(".owl")) 
+  										{
+  											hasValueText = hasValueText.substring(hasValueText.indexOf("owl") + 3);
+  										}
+
+  									}
+
+  									for (int m = 0; m < someValueList.getLength(); ++m) {
+
+  										Element someValue = (Element) someValueList.item(m);
+  										someValueText = someValue.getAttribute("rdf:resource").replace("#", "");
+  										if (someValueText.contains(".owl"))
+  										{
+  											someValueText = someValueText.substring(someValueText.indexOf("owl") + 3);
+  										}
+
+  									}
+
+  									for (int m = 0; m < allValueList.getLength(); ++m) {
+
+  										Element allValue = (Element) allValueList.item(m);
+  										allValueText = allValue.getAttribute("rdf:resource").replace("#", "");
+  										if (allValueText.contains(".owl"))
+  										{
+  											allValueText = allValueText.substring(allValueText.indexOf("owl") + 3);
+  										}
+
+  									}
+  									
+  				    	    		          if(!someValueText.isEmpty()){
+ 				    	   	    		        br.write("(forall (x)\n");
+ 				    	   		    			br.write("(if  (" + HeadNode+ " x)\n");
+ 				    	   		    			br.write("(exist  y\n");
+ 				    	   		    			br.write(" and  (" + onPropertyText + " x  y)\n");
+ 				    	   		    			br.write("      (" + onPropertyText + "    y))))\n");
+ 				    	   		    			br.write("\n");
+    				    	   		    			}
   				    	   	    		    
-  				    	   	    		       if(hasValueText.isEmpty()){
-  				    	   	    		        br.write("(forall (x)\n");
-  				    	   		    			br.write("(if  (" + HeadNode+ " x)\n");
-  				    	   		    			br.write("(exist  y\n");
-  				    	   		    			br.write(" and  (" + onPropertyText + " x  y)\n");
-  				    	   		    			br.write("      (" + onPropertyText + "    y)))))\n");
-  				    	   		    			br.write("\n");
-  				    	   		    			
-  				    	   	    		       }
+  				    	   	    		       if(!hasValueText.isEmpty()){
+  	  				    	    		    	br.write("(forall (x)\n");
+  	  				    	   		    		br.write("(if  (" + HeadNode+ " x)\n");
+  	  				    	   		    		br.write("     (" + onPropertyText + " x  " +hasValueText+")))\n");
+  	  				    	   		    		br.write("\n");
+    				    	   	    		       }
+  				    	   	    		       
+  				    	   	    		       if(!allValueText.isEmpty()){
+  	  				    	    		    	br.write("(forall (x)\n");
+  	  				    	   		    		br.write("(if  (" + HeadNode+ " x)\n");
+  	  				    	   		    	    br.write("    (forall (y)\n");
+ 				    	   		    			br.write(" and  (" + onPropertyText + " x  y)\n");
+ 				    	   		    			br.write("      (" + onPropertyText + "    y))))\n");
+  	  				    	   		    		br.write("\n");
+  				    	   	    		       	   }
 
   				    		    	}
   				    		        
@@ -168,26 +178,21 @@ public class OWL2FOL {
   				        	
   			
   				            Element option = (Element) optionList.item(k);
-  				            
-  				            //String test=  "http://sweet.jpl.nasa.gov/2.3/propEnergyFlux.owlRadiativeForcing x";
-  				            //test.replace(target, replacement)
-  				            
-  				            
-  				            
-  				            String optionText = option.getAttribute("rdf:resource").replaceAll("#", "");
-  					            if(optionText.contains(".owl"))
+
+  				            String EquivalentText = option.getAttribute("rdf:resource").replaceAll("#", "");
+  					            if(EquivalentText.contains(".owl"))
   					            	
   				            {
   				            	
-  					            	optionText = 	optionText.substring(optionText.indexOf("owl")+3);
+  					            	EquivalentText = 	EquivalentText.substring(EquivalentText.indexOf("owl")+3);
   				            }
-  				            //br.write("rdfs:subClassOf :"+optionText);
-  				    		if(!optionText.isEmpty())
+
+  				    		if(!EquivalentText.isEmpty())
   				    			
   				    		{
   				    			br.write("(forall (x) \n");
   				    			br.write("(iff  (" + HeadNode+ " x)\n");
-  				    			br.write("     (" + optionText + " x)))\n");
+  				    			br.write("     (" + EquivalentText + " x)))\n");
   				    			br.write("\n");
   				    			
   				    			
@@ -200,54 +205,30 @@ public class OWL2FOL {
   						NodeList disJointList = eElement.getElementsByTagName("owl:disjointWith");
   				        for (int k = 0; k < disJointList.getLength(); ++k)
   				        {
-  				        	
-  			
+
   				            Element option = (Element) disJointList.item(k);
-  				            
-  				            //String test=  "http://sweet.jpl.nasa.gov/2.3/propEnergyFlux.owlRadiativeForcing x";
-  				            //test.replace(target, replacement)
-  				            
-  				            
-  				            
-  				            String optionText = option.getAttribute("rdf:resource").replaceAll("#", "");
-  				            if(optionText.contains(".owl"))
+
+  				            String DisjointText = option.getAttribute("rdf:resource").replaceAll("#", "");
+  				            if(DisjointText.contains(".owl"))
   				            	
   			            {
   			            	
-  				            	optionText = 	optionText.substring(optionText.indexOf("owl")+3);
+  				            	DisjointText = 	DisjointText.substring(DisjointText.indexOf("owl")+3);
   			            }
   				            //br.write("rdfs:subClassOf :"+optionText);
-  				    		if(!optionText.isEmpty())
+  				    		if(!DisjointText.isEmpty())
   				    			
   				    		{
   				    			br.write("(forall (x)\n");
   				    			br.write("(if  (" + HeadNode+ " x)\n");
-  				    			br.write(" not (" + optionText + " x)))\n");
+  				    			br.write(" not (" + DisjointText + " x)))\n");
   				    			br.write("\n");
   				    			
   				    			
   				    		}
   				    		
   				    			}
-  						
-  						
-  						
-  			//			
-  			//			br.write(eElement.getElementsByTagName("rdfs:subClassOf").item(0).getTextContent());
-  			//			
-  			//			
-  				
-  						//System.out.print(innerXml(nNode));
-  						//br.write("-------hehe----------");
-  			//			if(sCurrentLine.contains("<!ENTITY"))
-  			//			{
-  			//			if(innerXml(nNode).contains("<rdfs:subClassOf rdf:resource="))
-  			//			{
-  			//				
-  			//				
-  			//			}
-  						
-  						
+
   					}
   					
   					

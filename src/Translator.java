@@ -18,8 +18,6 @@ public class Translator {
 
 	public static void main(String argv[]) {
 
-		String choice = "";
-
 		// ------------JFrame set up and display------------------
 		JFrame frame = new JFrame("Ontology Translator");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
