@@ -1,3 +1,4 @@
+package modules;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -14,11 +15,21 @@ import org.w3c.dom.NodeList;
 public class OWL2CL {
 
 	public OWL2CL() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
-	public void FileGen(File fXmlFile) {
+	public String FileGen(File fXmlFile) {
+		
+		File module = new File(fXmlFile.getName().replace(".owl", "") + "_CL.txt");
+		
 		try {
+
+			if (!module.exists()) {
+				module.createNewFile();
+			}
+			
+			FileWriter fw = new FileWriter(module, true);
+			BufferedWriter br = new BufferedWriter(fw);
 
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -27,17 +38,7 @@ public class OWL2CL {
 			doc.getDocumentElement().normalize();
 
 			NodeList nList = doc.getElementsByTagName("owl:Class");
-
-			File module = null;
-
-			module = new File(fXmlFile.getName().replace(".owl", "") + "_CL.txt");
-			if (!module.exists()) {
-				module.createNewFile();
-			}
-
-			FileWriter fw = new FileWriter(module, true);
-			BufferedWriter br = new BufferedWriter(fw);
-
+			
 			for (int temp = 0; temp < nList.getLength(); temp++) {
 
 				Node nNode = nList.item(temp);
@@ -45,26 +46,28 @@ public class OWL2CL {
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
 					Element eElement = (Element) nNode;
-
-					String HeadNode = eElement.getAttribute("rdf:about").replace("#", "");
-
+					String HeadNode = eElement.getAttribute("rdf:about");
+					
+							if(HeadNode == "")
+								HeadNode =  eElement.getAttribute("rdf:ID");		
+							
+					HeadNode = HeadNode.replace("#", "");
+					
 					NodeList SubClassList = eElement.getElementsByTagName("rdfs:subClassOf");
 					for (int j = 0; j < SubClassList.getLength(); ++j) {
 
 						Element subClass = (Element) SubClassList.item(j);
-						String optionText = subClass.getAttribute("rdf:resource").replace("#", "");
-						if (optionText.contains(".owl")) {
+						String subclassText = subClass.getAttribute("rdf:resource").replace("#", "");
+						if (subclassText.contains(".owl")) {
 
-							optionText = optionText.substring(optionText.indexOf("owl") + 3);
+							subclassText = subclassText.substring(subclassText.indexOf("owl") + 3);
 						}
-						// br.write("rdfs:subClassOf :"+optionText);
-						if (!optionText.isEmpty())
 
-						{
+						if (!subclassText.isEmpty()){
 							br.write("(all x \n");
 							br.write("    (" + HeadNode + "(x)\n");
 							br.write("      -> \n");
-							br.write("    " + optionText + "(x))).\n");
+							br.write("    " + subclassText + "(x))).\n");
 							br.write("\n");
 						} else {
 
@@ -75,8 +78,6 @@ public class OWL2CL {
 							NodeList RestrictionList = subClass.getElementsByTagName("owl:Restriction");
 							for (int l = 0; l < RestrictionList.getLength(); ++l) {
 
-								Element Restriction = (Element) RestrictionList.item(l);
-
 								NodeList onPropertyList = subClass.getElementsByTagName("owl:onProperty");
 
 								for (int m = 0; m < onPropertyList.getLength(); ++m) {
@@ -84,7 +85,6 @@ public class OWL2CL {
 									Element onProperty = (Element) onPropertyList.item(m);
 									onPropertyText = onProperty.getAttribute("rdf:resource").replace("#", "");
 									if (onPropertyText.contains(".owl")) {
-
 										onPropertyText = onPropertyText.substring(onPropertyText.indexOf("owl") + 3);
 									}
 
@@ -110,9 +110,7 @@ public class OWL2CL {
 									Element someValue = (Element) someValueList.item(m);
 									someValueText = someValue.getAttribute("rdf:resource").replace("#", "");
 									if (someValueText.contains(".owl"))
-
 									{
-
 										someValueText = someValueText.substring(someValueText.indexOf("owl") + 3);
 									}
 
@@ -230,11 +228,9 @@ public class OWL2CL {
 
 				}
 
-				// br.write("-----------------");
 			}
 
-			// ====================object
-			// property=====================================
+			// ====================object property=====================================
 
 			NodeList ObjectPropertyList = doc.getElementsByTagName("owl:ObjectProperty");
 
@@ -302,12 +298,12 @@ public class OWL2CL {
 
 		
 		br.close();	
-		JOptionPane.showMessageDialog(null,"<html> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Success! <br><br> File:&nbsp "+module.getName()+"</html>");
-			    
+	    
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-
-
+			}
+		
+		return module.getName();
+		
 	}
 }

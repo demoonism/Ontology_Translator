@@ -7,6 +7,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import StandAlone.CL2FOL;
+import modules.OWL2CL;
+import modules.OWL2FOL;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -14,7 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class Translator {
+public class GUI {
 
 	public static void main(String argv[]) {
 
@@ -22,9 +26,12 @@ public class Translator {
 		JFrame frame = new JFrame("Ontology Translator");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		String displayText = "<html> <b>Making an odd school GUI to match<br>the rest of the Ontology society"
-				+ "<br><br><br><br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp "
-				+ "Creator: Demoonism</html>";
+		String displayText = "<html> <b>"
+							+ "Making an odd school GUI to match"
+							+ "<br>the rest of the Ontology society<br>"
+							+ "<br><br><br>"
+							+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp "
+							+ "Creator: Demoonism</html>";
 
 		JLabel label = new JLabel(displayText, JLabel.CENTER);
 		label.setVerticalTextPosition(JLabel.BOTTOM);
@@ -60,17 +67,18 @@ public class Translator {
 					if (choice.equalsIgnoreCase("OWL => FOL")) {
 
 						OWL2FOL FOL_mapper = new OWL2FOL();
-						FOL_mapper.FileGen(fXmlFile);
-
+						String output = FOL_mapper.FileGen(fXmlFile);
+						
 					}
 					else if (choice.equalsIgnoreCase("OWL => CL")) {
 						OWL2CL CL_mapper = new OWL2CL();
-						CL_mapper.FileGen(fXmlFile);
+						String output = CL_mapper.FileGen(fXmlFile);
+						
 					}
 					else if (choice.equalsIgnoreCase("CL => FOL (beta)")) {
 
-						OWL2FOL mapper = new OWL2FOL();
-						mapper.FileGen(fXmlFile);
+						CL2FOL mapper = new CL2FOL();
+						//String output = mapper.FileGen(fXmlFile);
 
 					}
 					

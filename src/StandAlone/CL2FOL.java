@@ -1,3 +1,4 @@
+package StandAlone;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -7,21 +8,16 @@ import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// Translate a .clif file to .in format
+public class CL2FOL {
 
-public class CL_to_FOL {
-
-	public static void main(String[] args) throws IOException {
-	
-		File folder = new File("F:\\CL");
-		File[] listOfFiles = folder.listFiles();
-		Search(listOfFiles);
-
+	public CL2FOL() {
+		// TODO Auto-generated constructor stub
 	}
 	
 	
 
-	public static void Search(File[] listOfFiles) {
+
+	public static void FileGen(File[] listOfFiles) {
 		
 
 		BufferedReader br = null;
@@ -38,7 +34,6 @@ public class CL_to_FOL {
 					  String condition ="";
 		        	  String operator ="";
 		        	  String triple ="";
-
 				      String equation = "";
 				      String Empty = "";
 				      String LeftOver = "";
@@ -719,5 +714,5 @@ public class CL_to_FOL {
 		
     }
 	
-	
+
 }

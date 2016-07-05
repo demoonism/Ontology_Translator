@@ -1,3 +1,4 @@
+package StandAlone;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 
@@ -23,10 +24,13 @@ public class OWL_to_CL{
  
 	doc.getDocumentElement().normalize();
  
-	NodeList nList = doc.getElementsByTagName("owl:Class");
+	//NodeList nList = doc.getElementsByTagName("owl:Class");
+	Element eElement = doc.getDocumentElement();
+	
+	System.out.println(eElement.getAttribute("rdf:about"));
+	
 
-
- 
+ /*
 	for (int temp = 0; temp < nList.getLength(); temp++) {
  
 		Node nNode = nList.item(temp);
@@ -364,7 +368,7 @@ public class OWL_to_CL{
 		
 							}
 	
-	
+	*/
 	
 	
 	

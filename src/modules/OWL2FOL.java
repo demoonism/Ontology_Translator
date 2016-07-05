@@ -1,3 +1,4 @@
+package modules;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -17,9 +18,20 @@ public class OWL2FOL {
 
 	}
 	
-	public void FileGen(File fXmlFile){
-		    
+	public String FileGen(File fXmlFile){
+		
+		File module = new File(fXmlFile.getName().replace(".owl", "")+"_FOL.txt");
+		
 		try {
+			
+
+  		    	if (!module.exists()) {
+  		    		module.createNewFile();
+  				}
+  		    	
+  				FileWriter fw = new FileWriter(module,true);
+  				BufferedWriter br = new BufferedWriter(fw);
+  				
 
   				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
   				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -27,16 +39,6 @@ public class OWL2FOL {
   			 
   				doc.getDocumentElement().normalize();
   				NodeList nList = doc.getElementsByTagName("owl:Class");
-  			
-  				File module = null;
-  		    	
-  		    	module = new File(fXmlFile.getName().replace(".owl", "")+"_FOL.txt");
-  		    	if (!module.exists()) {
-  		    		module.createNewFile();
-  				}
-  		    	
-  				FileWriter fw = new FileWriter(module,true);
-  				BufferedWriter br = new BufferedWriter(fw);
   				
   				for (int temp = 0; temp < nList.getLength(); temp++) {
   			 
@@ -236,11 +238,12 @@ public class OWL2FOL {
   				}
 
   				br.close();	
-  				JOptionPane.showMessageDialog(null,"<html> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Success! <br><br> File:&nbsp "+module.getName()+"</html>");
-  			    
+  		
   			    } catch (Exception e) {
   				e.printStackTrace();
   			    }
+		
+		return module.getName();
 		
 	}
 
